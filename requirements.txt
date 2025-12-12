@@ -1,0 +1,17 @@
+
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+fastapi
+uvicorn
+pydantic
+pytest
+mlflow
+jupyter
+black
+flake8
+requests
+xverse
+woe
