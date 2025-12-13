@@ -30,6 +30,11 @@ app.add_middleware(
 # Global variable for model path
 MODEL_PATH = os.getenv("MODEL_PATH", "models/fraud_model.pkl")
 
+# Force override in Docker if MLflow URI is still present (fix for stale config)
+if os.getenv("IS_DOCKER") and (MODEL_PATH.startswith("models:/") or MODEL_PATH.startswith("runs:/")):
+    logger.warning(f"Detected MLflow URI in Docker: {MODEL_PATH}. Overriding to local pickle 'models/fraud_model.pkl'")
+    MODEL_PATH = "models/fraud_model.pkl"
+
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):

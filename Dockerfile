@@ -20,7 +20,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY src/ ./src/
 COPY data/ ./data/
-# Copy models directory if it exists (or ensure volume mount)
+# Copy models directory (exported pickle)
 COPY models/ ./models/
 
 # Expose port

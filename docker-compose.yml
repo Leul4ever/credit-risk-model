@@ -10,9 +10,9 @@ services:
       - "8000:8000"
     volumes:
       - ./src:/app/src
-      - ./models:/app/models
     environment:
       - MODEL_PATH=models/fraud_model.pkl
+      - IS_DOCKER=true
     restart: unless-stopped
 
   dashboard:
