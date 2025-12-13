@@ -386,4 +386,46 @@ pytest tests/test_data_processing.py
 2. ✅ ~~Implement feature engineering pipeline (Task 3)~~ **COMPLETED**
 3. ✅ ~~Create proxy target variable using RFM clustering (Task 4)~~ **COMPLETED**
 4. ✅ ~~Train and evaluate models (Task 5)~~ **COMPLETED**
-5. Deploy model API with CI/CD (Task 6)
+5. ✅ ~~Deploy model API with CI/CD (Task 6)~~ **COMPLETED**
+
+## Task 6: Model Deployment and CI/CD ✅
+
+### Overview
+Task 6 involved containerizing the credit risk model and deploying it as a REST API with a user-friendly dashboard. We also established a CI/CD pipeline for automated quality checks.
+
+### 1. Application Components
+- **API (FastAPI)**: Serves model predictions at port 8000.
+    - Features: Real-time inference (`/predict`), Health checks (`/health`), Batch prediction (`/predict/batch`).
+    - Robustness: Automatically falls back to a local model if MLflow is unavailable.
+- **Dashboard (Streamlit)**: Interactive UI at port 8501.
+    - Features: Form input for transaction details, visual risk gauges, and probability displays.
+- **Containerization**:
+    - `Dockerfile`: Builds the API image (Python 3.10).
+    - `Dockerfile.streamlit`: Builds the Dashboard image.
+    - `docker-compose.yml`: Orchestrates both services.
+
+### 2. How to Run the Application 🚀
+
+To start the full stack (API + Dashboard), open your terminal in the project root and run:
+
+```bash
+docker-compose up --build
+```
+*(Use `--build` to ensure any code changes are picked up)*
+
+### 3. Accessing the Application
+
+Once the containers are running:
+
+- **Dashboard**: [http://localhost:8501](http://localhost:8501)
+    - Open this in your browser to test the model interactively.
+
+- **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
+    - Swagger UI for testing API endpoints directly.
+
+- **API Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
+
+### 4. CI/CD Pipeline
+A GitHub Actions workflow (`.github/workflows/ci.yml`) is configured to run on every push:
+- **Linting**: Checks code quality with `flake8`.
+- **Testing**: Runs unit tests with `pytest`.
