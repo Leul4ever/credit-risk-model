@@ -67,7 +67,7 @@ class CustomerAggregateFeatures(BaseEstimator, TransformerMixin):
             ]).reset_index()
             
             # Fill NaN in std (for customers with single transaction)
-            self.aggregate_stats['std_amount'].fillna(0, inplace=True)
+            self.aggregate_stats['std_amount'] = self.aggregate_stats['std_amount'].fillna(0)
             
             logger.info(f"Aggregate features calculated for {len(self.aggregate_stats)} unique customers")
             return self
@@ -95,7 +95,7 @@ class CustomerAggregateFeatures(BaseEstimator, TransformerMixin):
             agg_columns = ['total_amount', 'avg_amount', 'transaction_count', 'std_amount']
             for col in agg_columns:
                 if col in X_transformed.columns:
-                    X_transformed[col].fillna(0, inplace=True)
+                    X_transformed[col] = X_transformed[col].fillna(0)
             
             logger.info(f"Added {len(agg_columns)} aggregate features")
             return X_transformed
@@ -239,9 +239,9 @@ class MissingValueHandler(BaseEstimator, TransformerMixin):
                 if X_transformed[col].isnull().any():
                     mode_value = X_transformed[col].mode()
                     if len(mode_value) > 0:
-                        X_transformed[col].fillna(mode_value[0], inplace=True)
+                        X_transformed[col] = X_transformed[col].fillna(mode_value[0])
                     else:
-                        X_transformed[col].fillna('missing', inplace=True)
+                        X_transformed[col] = X_transformed[col].fillna('missing')
             
             logger.info("Missing values handled")
             return X_transformed
@@ -503,8 +503,8 @@ class WoEIVEncoder(BaseEstimator, TransformerMixin):
             for col in self.selected_features:
                 if col in X_transformed.columns:
                     woe_map = self.woe_dict[col]
-                    # Map values to WoE, use 0 for unseen categories
-                    X_transformed[f'{col}_woe'] = X_transformed[col].map(woe_map).fillna(0)
+                    # Map values to WoE, explicitly convert to float, use 0 for unseen categories
+                    X_transformed[f'{col}_woe'] = X_transformed[col].map(woe_map).astype(float).fillna(0)
                     # Optionally drop original column
                     # X_transformed = X_transformed.drop(columns=[col])
             
