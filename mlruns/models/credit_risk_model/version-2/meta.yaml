@@ -1,0 +1,15 @@
+creation_timestamp: 1765639191225
+current_stage: None
+deployment_job_state: null
+description: null
+last_updated_timestamp: 1765639191225
+model_id: m-4b1c251e6ad24084ac6d53f7968f297d
+name: credit_risk_model
+run_id: 203a54ede62c417ab3f62f6bd47d0e49
+run_link: null
+source: models:/m-4b1c251e6ad24084ac6d53f7968f297d
+status: READY
+status_message: null
+storage_location: file:D:/kifyaAi/credit-risk-model/mlruns/360003127275112457/models/m-4b1c251e6ad24084ac6d53f7968f297d/artifacts
+user_id: null
+version: 2

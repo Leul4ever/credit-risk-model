@@ -95,14 +95,20 @@ credit-risk-model/
 ├── data/                       # add this folder to .gitignore
 │   ├── raw/                   # Raw data goes here 
 │   └── processed/             # Processed data for training
+├── docs/                       # Documentation
+│   ├── TASK3_FEATURE_ENGINEERING.md  # Task 3 documentation
+│   └── TASK4_TARGET_ENGINEERING.md    # Task 4 documentation
 ├── notebooks/
 │   └── eda.ipynb              # Exploratory Data Analysis (Task 2)
 ├── reports/                    # Analysis reports and figures
 │   ├── TASK_2_COMPLETION.md   # Task 2 completion report
-│   └── figures/               # EDA visualization figures
+│   ├── TASK_4_COMPLETION.md   # Task 4 completion report
+│   └── figures/               # EDA and clustering visualization figures
 ├── src/
 │   ├── __init__.py
-│   ├── data_processing.py     # Script for feature engineering
+│   ├── data_processing.py     # Data loading utilities
+│   ├── feature_engineering.py # Feature engineering pipeline (Task 3)
+│   ├── target_engineering.py  # RFM analysis and target creation (Task 4)
 │   ├── train.py               # Script for model training
 │   ├── predict.py             # Script for inference
 │   └── api/
@@ -211,9 +217,127 @@ Based on EDA findings:
 5. Generate customer-level aggregations (by CustomerId, AccountId)
 6. Encode categorical variables (one-hot, target encoding, or WoE)
 
+## Task 3: Feature Engineering Pipeline ✅
+
+### Overview
+Task 3 implements a comprehensive, automated, and reproducible feature engineering pipeline using `sklearn.pipeline.Pipeline` to transform raw financial transaction data into a model-ready format.
+
+### Key Features Implemented
+
+1. ✅ **Customer Aggregate Features**
+   - Total Transaction Amount, Average Transaction Amount
+   - Transaction Count, Standard Deviation per customer
+
+2. ✅ **Temporal Feature Extraction**
+   - Transaction Hour, Day, Month, Year
+   - Day of Week, Is Weekend flag
+   - Time of Day categories (night/morning/afternoon/evening)
+
+3. ✅ **Categorical Encoding**
+   - One-Hot Encoding for low-cardinality features (≤ 10 unique values)
+   - Label Encoding for high-cardinality features (> 10 unique values)
+   - Automatic strategy selection based on cardinality
+
+4. ✅ **Missing Value Handling**
+   - Simple Imputation (mean, median, mode)
+   - KNN Imputation for complex patterns
+   - Column removal for > 50% missing values
+
+5. ✅ **Feature Scaling**
+   - Standardization (Z-score normalization)
+   - Min-Max Scaling (range normalization)
+
+6. ✅ **Weight of Evidence (WoE) and Information Value (IV)**
+   - WoE transformation for categorical variables
+   - IV calculation for feature selection
+   - Automatic filtering by IV threshold
+
+### Implementation
+
+- **Main Module**: `src/feature_engineering.py`
+- **Pipeline**: Uses sklearn Pipeline for reproducibility
+- **Documentation**: `docs/TASK3_FEATURE_ENGINEERING.md`
+
+### Usage
+
+```python
+from src.feature_engineering import FeatureEngineeringPipeline
+
+# Initialize pipeline
+pipeline = FeatureEngineeringPipeline()
+
+# Fit and transform
+X_processed = pipeline.fit_transform(X_train, y_train)
+X_test_processed = pipeline.transform(X_test)
+```
+
+## Task 4: Proxy Target Variable Engineering ✅
+
+### Overview
+Task 4 creates a credit risk proxy target variable using RFM (Recency, Frequency, Monetary) analysis and K-Means clustering to identify "disengaged" customers as high-risk proxies.
+
+### Implementation Steps
+
+1. ✅ **Calculate RFM Metrics**
+   - **Recency**: Days since last transaction (from snapshot date)
+   - **Frequency**: Total number of transactions per customer
+   - **Monetary**: Total transaction value per customer
+   - **Results**: 3,742 unique customers analyzed
+
+2. ✅ **Cluster Customers**
+   - **Algorithm**: K-Means clustering with 3 clusters
+   - **Pre-processing**: StandardScaler applied to RFM features
+   - **Random State**: 42 (for reproducibility)
+   - **Silhouette Score**: 0.5732 (good clustering quality)
+
+3. ✅ **Define and Assign High-Risk Label**
+   - **High-Risk Cluster**: Cluster 0 identified (38.11% of customers)
+   - **Characteristics**: High Recency (60.88 days), Low Frequency (7.72), Low Monetary (89,738)
+   - **Binary Target**: `is_high_risk` column created (1 = high-risk, 0 = low-risk)
+
+4. ✅ **Integrate Target Variable**
+   - Merged `is_high_risk` back to original dataset
+   - Output: `data/processed/data_with_risk_target.csv`
+
+### Cluster Profiles
+
+| Cluster | Recency (days) | Frequency | Monetary | Customers | Interpretation |
+|---------|----------------|-----------|----------|-----------|----------------|
+| **0** 🔴 | 60.88 | 7.72 | 89,738 | 1,426 (38%) | **High-Risk**: Inactive, low engagement |
+| 1 | 11.72 | 34.70 | 224,757 | 2,312 (62%) | Low-Risk: Active, moderate engagement |
+| 2 | 22.25 | 1,104.50 | 74.9M | 4 (0.1%) | VIP: Very high engagement |
+
+### Implementation
+
+- **Main Module**: `src/target_engineering.py`
+- **Classes**: `RFMAnalyzer`, `CustomerSegmentation`
+- **Main Function**: `create_proxy_target()` - Complete pipeline
+- **Documentation**: `docs/TASK4_TARGET_ENGINEERING.md`
+- **Completion Report**: `reports/TASK_4_COMPLETION.md`
+- **Visualization**: `reports/figures/rfm_clusters.png`
+
+### Usage
+
+```python
+from src.target_engineering import create_proxy_target
+
+# Create proxy target
+df_with_target, metadata = create_proxy_target(
+    df,
+    customer_col='CustomerId',
+    date_col='TransactionStartTime',
+    value_col='Value',
+    n_clusters=3,
+    random_state=42,
+    save_visualization=True
+)
+
+print(f"High-Risk Customers: {metadata['high_risk_count']} ({metadata['high_risk_percentage']:.2f}%)")
+```
+
 ## Next Steps
 1. ✅ ~~Download and explore the dataset (Task 2 - EDA)~~ **COMPLETED**
-2. Implement feature engineering pipeline (Task 3)
-3. Create proxy target variable using RFM clustering (Task 4)
+2. ✅ ~~Implement feature engineering pipeline (Task 3)~~ **COMPLETED**
+3. ✅ ~~Create proxy target variable using RFM clustering (Task 4)~~ **COMPLETED**
 4. Train and evaluate models (Task 5)
 5. Deploy model API with CI/CD (Task 6)

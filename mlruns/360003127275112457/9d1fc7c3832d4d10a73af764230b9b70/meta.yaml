@@ -1,0 +1,14 @@
+artifact_uri: file:D:/kifyaAi/credit-risk-model/mlruns/360003127275112457/9d1fc7c3832d4d10a73af764230b9b70/artifacts
+end_time: 1765639180540
+entry_point_name: ''
+experiment_id: '360003127275112457'
+lifecycle_stage: active
+run_id: 9d1fc7c3832d4d10a73af764230b9b70
+run_name: Gradient Boosting
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1765639173976
+status: 3
+tags: []
+user_id: dell

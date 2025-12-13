@@ -1,0 +1,10 @@
+artifact_location: file:D:/kifyaAi/credit-risk-model/mlruns/360003127275112457/models/m-3842a281e9ed4a16a95a3b78619e17c4/artifacts
+creation_timestamp: 1765639088925
+experiment_id: '360003127275112457'
+last_updated_timestamp: 1765639090817
+model_id: m-3842a281e9ed4a16a95a3b78619e17c4
+model_type: null
+name: model
+source_run_id: d7c3c0dea67e401784fa6a3b676a2beb
+status: 2
+status_message: null

@@ -357,8 +357,8 @@ class FeatureScaler(BaseEstimator, TransformerMixin):
             numeric_cols = X.select_dtypes(include=[np.number]).columns
             self.scale_cols = [col for col in numeric_cols if col not in self.exclude_cols]
             
-            if not self.scale_cols:
-                logger.warning("No numerical columns to scale")
+            if not self.scale_cols or self.method in [None, 'none']:
+                logger.warning("Scaling disabled or no numerical columns")
                 return self
             
             # Initialize scaler
