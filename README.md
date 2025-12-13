@@ -335,9 +335,55 @@ df_with_target, metadata = create_proxy_target(
 print(f"High-Risk Customers: {metadata['high_risk_count']} ({metadata['high_risk_percentage']:.2f}%)")
 ```
 
+## Task 5: Model Training and Tracking ✅
+
+### Overview
+Task 5 implements a robust, reproducible model training pipeline with experiment tracking using **MLflow**. It systematically trains, tunes, and evaluates multiple machine learning algorithms to predict credit risk.
+
+### Key Components
+
+1. ✅ **Data Preparation**
+   - **Splitting**: 80/20 Train/Test split (`random_state=42`)
+   - **Balancing**: SMOTE applied to training data
+   - **Preprocessing**: Integration with feature engineering pipeline
+
+2. ✅ **Model Selection**
+   - **Models**: Logistic Regression, Decision Tree, Random Forest, Gradient Boosting
+   - **Tuning**: RandomizedSearchCV for hyperparameter optimization
+
+3. ✅ **Experiment Tracking (MLflow)**
+   - **Logging**: Parameters, metrics (ROC-AUC, F1, Accuracy), and artifacts
+   - **Registry**: Automatic registration of the best performing model
+
+4. ✅ **Unit Testing**
+   - Comprehensive tests in `tests/test_data_processing.py` to verify data integrity and processing logic
+
+### Implementation
+
+- **Main Script**: `src/train_mlflow.py`
+- **Unit Tests**: `tests/test_data_processing.py`
+- **Documentation**: `docs/TASK5_MODEL_TRAINING.md`
+
+### Usage
+
+**Train Models:**
+```bash
+python src/train_mlflow.py
+```
+
+**View MLflow Dashboard:**
+```bash
+mlflow ui
+```
+
+**Run Unit Tests:**
+```bash
+pytest tests/test_data_processing.py
+```
+
 ## Next Steps
 1. ✅ ~~Download and explore the dataset (Task 2 - EDA)~~ **COMPLETED**
 2. ✅ ~~Implement feature engineering pipeline (Task 3)~~ **COMPLETED**
 3. ✅ ~~Create proxy target variable using RFM clustering (Task 4)~~ **COMPLETED**
-4. Train and evaluate models (Task 5)
+4. ✅ ~~Train and evaluate models (Task 5)~~ **COMPLETED**
 5. Deploy model API with CI/CD (Task 6)
