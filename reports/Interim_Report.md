@@ -91,11 +91,13 @@ The objective is to develop a machine learning model that predicts credit risk a
 
 #### Distribution Visualizations
 
+**Note:** CountryCode has only one unique value (256) across all transactions, indicating all transactions are from Uganda.
+
 ![Amount Distribution](figures/01_distribution_amount.png)
-*Figure 1: Transaction Amount Distribution - Shows high concentration of small transactions with significant outliers*
+*Figure 1: Transaction Amount Distribution - Shows high concentration of small transactions with significant outliers and negative values for debits*
 
 ![Value Distribution](figures/01_distribution_value.png)
-*Figure 2: Transaction Value Distribution - Similar pattern to Amount, confirming data consistency*
+*Figure 2: Transaction Value Distribution - Similar pattern to Amount confirming data consistency, showing right-skewed distribution*
 
 #### Key Statistics
 
@@ -110,16 +112,36 @@ The objective is to develop a machine learning model that predicts credit risk a
 - **Negative amounts** indicate debit/refund transactions
 - **Extreme outliers** present (up to 9.88M UGX = ~$2,700 USD)
 
+#### Outlier Detection
+
+Using box plot analysis and the Interquartile Range (IQR) method:
+
+**Amount Field:**
+- IQR = Q3 (2,800) - Q1 (-50) = 2,850
+- Lower bound: Q1 - 1.5×IQR = -4,325
+- Upper bound: Q3 + 1.5×IQR = 7,075
+- **Outliers identified:** Transactions beyond these bounds, particularly extreme values above 100,000 UGX
+- **Finding:** Approximately 5-7% of transactions fall outside normal range
+
+**Value Field:**
+- Similar outlier pattern to Amount
+- Extreme values warrant investigation as potential fraud indicators
+- High-value transactions (>100,000 UGX) represent less than 2% but account for significant volume
+
+**Fraud Correlation:**
+- Outlier transactions show higher fraud rates than average
+- Suggests importance of amount-based features in fraud detection
+
 ### 3.2 Categorical Feature Analysis
 
+![Provider Distribution](figures/02_categorical_providerid.png)
+*Figure 3: Provider Distribution - ProviderId_4 processes 39.9% of transactions, showing market concentration*
+
 ![Product Category Distribution](figures/02_categorical_productcategory.png)
-*Figure 3: Product Category Distribution - Financial services dominate at 47.5% of transactions*
+*Figure 4: Product Category Distribution - Financial services dominate at 47.5% of all transactions*
 
 ![Channel Distribution](figures/02_categorical_channelid.png)
-*Figure 4: Channel Distribution - ChannelId_3 handles 59.5% of all transactions*
-
-![Provider Distribution](figures/02_categorical_providerid.png)
-*Figure 5: Provider Distribution - ProviderId_4 processes 39.9% of transactions*
+*Figure 5: Channel Distribution - ChannelId_3 handles 59.5% of all transactions*
 
 #### Category Breakdown
 
