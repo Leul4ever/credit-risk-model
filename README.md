@@ -96,7 +96,10 @@ credit-risk-model/
 │   ├── raw/                   # Raw data goes here 
 │   └── processed/             # Processed data for training
 ├── notebooks/
-│   └── eda.ipynb          # Exploratory, one-off analysis
+│   └── eda.ipynb              # Exploratory Data Analysis (Task 2)
+├── reports/                    # Analysis reports and figures
+│   ├── TASK_2_COMPLETION.md   # Task 2 completion report
+│   └── figures/               # EDA visualization figures
 ├── src/
 │   ├── __init__.py
 │   ├── data_processing.py     # Script for feature engineering
@@ -118,11 +121,98 @@ credit-risk-model/
 1. **Proxy Target Creation:** Use RFM (Recency, Frequency, Monetary) analysis and clustering to identify high-risk customer segments
 2. **Feature Engineering:** Transform raw transaction data into predictive features using statistical aggregations and WoE encoding
 3. **Model Development:** Train and compare multiple models (Logistic Regression, Random Forest, Gradient Boosting)
-4. **Model Deployment:** Containerize the best model and deploy as a REST c;API
+4. **Model Deployment:** Containerize the best model and deploy as a REST API
 5. **CI/CD Pipeline:** Implement automated testing and deployment workflows
 
+## Task 2: Exploratory Data Analysis (EDA) ✅
+
+### Overview
+Task 2 focuses on exploring the dataset to uncover patterns, identify data quality issues, and form hypotheses that will guide feature engineering. The EDA was conducted in `notebooks/eda.ipynb` and all visualizations are saved to `reports/figures/`.
+
+### Key Findings
+
+#### 1. Dataset Characteristics
+- **95,662 transactions** across **16 features**
+- **Time period**: 2018-11-15 to 2019-02-13 (~3 months)
+- **Data quality**: ✅ No missing values detected
+- **Data types**: 5 numerical, 11 categorical features
+- **Currency**: All transactions in UGX (single currency)
+
+#### 2. Highly Skewed Transaction Amounts
+- **Amount** and **Value** features show extreme right-skewness (skewness > 51)
+- Indicates a small number of very large transactions
+- **Action Required**: Log transformation needed for modeling
+- Strong correlation between Amount and Value (r = 0.99)
+
+#### 3. Imbalanced Target Variable
+- **FraudResult** shows severe class imbalance (skewness = 22.20)
+- Fraud cases represent a small minority of transactions
+- **Action Required**: Use SMOTE, class weights, or stratified sampling
+
+#### 4. Significant Outlier Presence
+- **Amount**: 24,441 outliers (25.5% of data)
+- **Value**: 9,021 outliers (9.4% of data)
+- May represent legitimate high-value transactions or potential fraud cases
+- **Action Required**: Consider robust scaling, capping, or separate treatment
+
+#### 5. Categorical Feature Insights
+- **ProductCategory**: "financial_services" dominates (47.5% of dataset)
+- **ChannelId**: ChannelId_3 most common (62.2%)
+- **ProviderId**: ProviderId_4 accounts for 39.9%
+- High cardinality in ID columns suggests rich customer-level patterns
+
+### EDA Deliverables
+
+All required sections have been completed:
+
+1. ✅ **Overview of the Data** - Dataset structure, rows, columns, data types
+2. ✅ **Summary Statistics** - Central tendency, dispersion, distribution shape
+3. ✅ **Distribution of Numerical Features** - Histograms with KDE for all numerical features
+4. ✅ **Distribution of Categorical Features** - Count plots for categorical variables
+5. ✅ **Correlation Analysis** - Correlation heatmap of numerical features
+6. ✅ **Identifying Missing Values** - Missing value analysis (none found)
+7. ✅ **Outlier Detection** - Box plots with IQR statistics
+8. ✅ **Top 5 Insights Summary** - Key findings documented
+
+### Running the EDA
+
+1. **Start Jupyter Notebook**:
+   ```bash
+   jupyter notebook
+   ```
+
+2. **Open the notebook**: `notebooks/eda.ipynb`
+
+3. **Run all cells**: The notebook will automatically:
+   - Load and analyze the data
+   - Generate all visualizations
+   - Save figures to `reports/figures/`
+
+### Generated Figures
+
+All visualizations are saved in `reports/figures/`:
+- `01_distribution_*.png` - Distribution plots for numerical features (5 files)
+- `02_categorical_*.png` - Distribution plots for categorical features (4 files)
+- `03_correlation_matrix.png` - Correlation heatmap
+- `04_outlier_detection_boxplots.png` - Outlier analysis box plots
+
+### Documentation
+
+- **Completion Report**: See `reports/TASK_2_COMPLETION.md` for detailed findings
+- **Notebook**: `notebooks/eda.ipynb` contains all analysis code and outputs
+
+### Recommendations for Task 3 (Feature Engineering)
+
+Based on EDA findings:
+1. Apply log transformation to Amount and Value features
+2. Handle outliers using robust scaling or capping
+3. Address class imbalance using appropriate techniques
+4. Create time-based features from TransactionStartTime
+5. Generate customer-level aggregations (by CustomerId, AccountId)
+6. Encode categorical variables (one-hot, target encoding, or WoE)
+
 ## Next Steps
-1. Download and explore the dataset (Task 2 - EDA)
+1. ✅ ~~Download and explore the dataset (Task 2 - EDA)~~ **COMPLETED**
 2. Implement feature engineering pipeline (Task 3)
 3. Create proxy target variable using RFM clustering (Task 4)
 4. Train and evaluate models (Task 5)
