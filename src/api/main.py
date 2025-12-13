@@ -79,7 +79,10 @@ async def health_check():
         dict: Health status including model availability
     """
     try:
-        model_exists = os.path.exists(MODEL_PATH)
+        if MODEL_PATH.startswith("models:/") or MODEL_PATH.startswith("runs:/"):
+            model_exists = True
+        else:
+            model_exists = os.path.exists(MODEL_PATH)
         
         health_status = {
             "status": "healthy" if model_exists else "degraded",
@@ -115,13 +118,14 @@ async def predict_fraud(transaction: Transaction):
         HTTPException: For various error conditions
     """
     try:
-        # Validate model exists
-        if not os.path.exists(MODEL_PATH):
-            logger.error(f"Model not found at {MODEL_PATH}")
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail=f"Model not found. Please train a model first."
-            )
+        # Validate model exists (skip check for MLflow URIs)
+        if not MODEL_PATH.startswith("models:/") and not MODEL_PATH.startswith("runs:/"):
+            if not os.path.exists(MODEL_PATH):
+                logger.error(f"Model not found at {MODEL_PATH}")
+                raise HTTPException(
+                    status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                    detail=f"Model not found. Please train a model first."
+                )
         
         # Convert transaction to dict
         try:
@@ -201,11 +205,12 @@ async def predict_batch(request: BatchPredictionRequest):
     """
     try:
         # Validate model exists
-        if not os.path.exists(MODEL_PATH):
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail=f"Model not found at {MODEL_PATH}"
-            )
+        if not MODEL_PATH.startswith("models:/") and not MODEL_PATH.startswith("runs:/"):
+            if not os.path.exists(MODEL_PATH):
+                raise HTTPException(
+                    status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                    detail=f"Model not found at {MODEL_PATH}"
+                )
         
         # Validate batch size
         if len(request.transactions) == 0:
@@ -289,11 +294,12 @@ async def get_model_info():
         HTTPException: If model not found or error loading info
     """
     try:
-        if not os.path.exists(MODEL_PATH):
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Model not found at {MODEL_PATH}"
-            )
+        if not MODEL_PATH.startswith("models:/") and not MODEL_PATH.startswith("runs:/"):
+            if not os.path.exists(MODEL_PATH):
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Model not found at {MODEL_PATH}"
+                )
         
         try:
             import sys
