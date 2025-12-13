@@ -1,0 +1,14 @@
+artifact_uri: file:D:/kifyaAi/credit-risk-model/mlruns/360003127275112457/b502381cbb0740e8b8b72519940db96f/artifacts
+end_time: 1765639191135
+entry_point_name: ''
+experiment_id: '360003127275112457'
+lifecycle_stage: active
+run_id: b502381cbb0740e8b8b72519940db96f
+run_name: LightGBM
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1765639188900
+status: 3
+tags: []
+user_id: dell

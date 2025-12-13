@@ -1,0 +1,31 @@
+artifact_path: file:D:/kifyaAi/credit-risk-model/mlruns/360003127275112457/models/m-b362ce9c25df4715812788c5db042cae/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.5.2
+is_signature_from_type_hint: false
+mlflow_version: 3.7.0
+model_id: m-b362ce9c25df4715812788c5db042cae
+model_size_bytes: 16014159
+model_uuid: m-b362ce9c25df4715812788c5db042cae
+prompts: null
+run_id: 84863b3be43f4e6a96e49ab40ae18512
+signature:
+  inputs: '[{"type": "long", "name": "CountryCode", "required": true}, {"type": "double",
+    "name": "Amount", "required": true}, {"type": "long", "name": "Value", "required":
+    true}, {"type": "long", "name": "PricingStrategy", "required": true}, {"type":
+    "long", "name": "FraudResult", "required": true}]'
+  outputs: '[{"type": "long", "name": "is_high_risk", "required": true}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-12-13 15:17:50.518843'

@@ -1,0 +1,14 @@
+artifact_uri: file:D:/kifyaAi/credit-risk-model/mlruns/360003127275112457/203a54ede62c417ab3f62f6bd47d0e49/artifacts
+end_time: 1765639162612
+entry_point_name: ''
+experiment_id: '360003127275112457'
+lifecycle_stage: active
+run_id: 203a54ede62c417ab3f62f6bd47d0e49
+run_name: Random Forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1765639159527
+status: 3
+tags: []
+user_id: dell

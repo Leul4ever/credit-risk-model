@@ -18,3 +18,5 @@ woe
 imbalanced-learn
 category-encoders
 joblib
+xgboost
+lightgbm

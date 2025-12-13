@@ -1,0 +1,14 @@
+artifact_uri: file:D:/kifyaAi/credit-risk-model/mlruns/360003127275112457/3839695874564f7f83c4adee6bdb0598/artifacts
+end_time: 1765639184630
+entry_point_name: ''
+experiment_id: '360003127275112457'
+lifecycle_stage: active
+run_id: 3839695874564f7f83c4adee6bdb0598
+run_name: XGBoost
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1765639182130
+status: 3
+tags: []
+user_id: dell
