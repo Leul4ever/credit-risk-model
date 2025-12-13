@@ -15,3 +15,6 @@ flake8
 requests
 xverse
 woe
+imbalanced-learn
+category-encoders
+joblib
