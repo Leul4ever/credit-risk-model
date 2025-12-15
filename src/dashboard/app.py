@@ -6,6 +6,8 @@ import uuid
 from datetime import datetime
 import pandas as pd
 
+import os
+
 # Page config
 st.set_page_config(
     page_title="Credit Risk & Fraud Detection",
@@ -15,7 +17,7 @@ st.set_page_config(
 )
 
 # API URL
-API_URL = "http://api:8000" if st.secrets.get("IS_DOCKER") else "http://localhost:8000"
+API_URL = "http://api:8000" if os.getenv("IS_DOCKER") else "http://localhost:8000"
 
 st.title("🛡️ Credit Risk & Fraud Detection Dashboard")
 st.markdown("Real-time scoring of e-commerce transactions for credit risk assessment.")
