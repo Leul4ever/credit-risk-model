@@ -28,12 +28,12 @@ app.add_middleware(
 )
 
 # Global variable for model path
-MODEL_PATH = os.getenv("MODEL_PATH", "models/fraud_model.pkl")
+# Default to Production stage in MLflow Registry
+MODEL_PATH = os.getenv("MODEL_PATH", "models:/credit_risk_model/Production")
 
-# Force override in Docker if MLflow URI is still present (fix for stale config)
-if os.getenv("IS_DOCKER") and (MODEL_PATH.startswith("models:/") or MODEL_PATH.startswith("runs:/")):
-    logger.warning(f"Detected MLflow URI in Docker: {MODEL_PATH}. Overriding to local pickle 'models/fraud_model.pkl'")
-    MODEL_PATH = "models/fraud_model.pkl"
+# In Docker, we might need adjustments, but we prioritize the Registry URI
+if os.getenv("IS_DOCKER") and not (MODEL_PATH.startswith("models:/") or MODEL_PATH.startswith("runs:/")):
+    logger.info("Docker environment detected with local path. Checking for registry preference...")
 
 
 @app.exception_handler(Exception)

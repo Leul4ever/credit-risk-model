@@ -10,9 +10,11 @@ services:
       - "8000:8000"
     volumes:
       - ./src:/app/src
+      - ./mlruns:/app/mlruns
     environment:
-      - MODEL_PATH=models/fraud_model.pkl
+      - MODEL_PATH=models:/credit_risk_model/Production
       - IS_DOCKER=true
+      - MLFLOW_TRACKING_URI=file:/app/mlruns
     restart: unless-stopped
 
   dashboard:
