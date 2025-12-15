@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
 
 def load_model(model_path: str) -> Dict:
     """
-    Load a trained model from disk with error handling.
+    Load a trained model from disk or MLflow with error handling.
     
     Args:
-        model_path: Path to the saved model file
+        model_path: Path to the saved model file or MLflow URI
         
     Returns:
         dict: Model data including model object and metadata
@@ -27,6 +27,21 @@ def load_model(model_path: str) -> Dict:
         ValueError: If model file is invalid
     """
     try:
+        # Check if it's an MLflow URI
+        if model_path.startswith("models:/") or model_path.startswith("runs:/"):
+            logger.info(f"Loading model from MLflow URI: {model_path}")
+            import mlflow.sklearn
+            model = mlflow.sklearn.load_model(model_path)
+            
+            # For MLflow models, we might not have metadata dict wrapped
+            # So we wrap it in our expected structure
+            return {
+                'model': model,
+                'feature_names': getattr(model, 'feature_names_in_', None), # Try to get from sklearn model
+                'training_date': 'MLflow Registry',
+                'metrics': {}
+            }
+            
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file not found at: {model_path}")
         
@@ -38,7 +53,14 @@ def load_model(model_path: str) -> Dict:
         
         # Validate model data structure
         if not isinstance(model_data, dict):
-            raise ValueError("Invalid model format: expected dictionary")
+            # It might be just the model object
+            logger.warning("Loaded object is not a dictionary. Assuming it is the model itself.")
+            return {
+                'model': model_data,
+                'feature_names': getattr(model_data, 'feature_names_in_', None),
+                'training_date': 'Unknown',
+                'metrics': {}
+            }
         
         if 'model' not in model_data:
             raise ValueError("Invalid model format: 'model' key not found")

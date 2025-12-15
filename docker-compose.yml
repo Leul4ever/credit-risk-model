@@ -1,11 +1,31 @@
-
 version: '3.8'
 
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: credit_risk_api
     ports:
       - "8000:8000"
     volumes:
       - ./src:/app/src
-    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - MODEL_PATH=models/fraud_model.pkl
+      - IS_DOCKER=true
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: credit_risk_dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./src:/app/src
+    environment:
+      - IS_DOCKER=true
+    depends_on:
+      - api
+    restart: unless-stopped
