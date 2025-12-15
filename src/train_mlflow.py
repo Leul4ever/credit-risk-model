@@ -519,12 +519,21 @@ def register_best_model(
     model_uri = f"runs:/{best_run['run_id']}/model"
     registered_model = mlflow.register_model(model_uri, model_name)
     
+    # Transition to Production
+    client = mlflow.MlflowClient()
+    client.transition_model_version_stage(
+        name=model_name,
+        version=registered_model.version,
+        stage="Production",
+        archive_existing_versions=True
+    )
+    
     logger.info(f"\n✓ Model registered successfully!")
     logger.info(f"  Model Name: {model_name}")
     logger.info(f"  Version: {registered_model.version}")
-    logger.info(f"  Stage: {registered_model.current_stage}")
+    logger.info(f"  Stage: Production")
     
-    return f"models:/{model_name}/{registered_model.version}"
+    return f"models:/{model_name}/Production"
 
 
 if __name__ == "__main__":

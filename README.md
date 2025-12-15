@@ -396,7 +396,10 @@ Task 6 involved containerizing the credit risk model and deploying it as a REST 
 ### 1. Application Components
 - **API (FastAPI)**: Serves model predictions at port 8000.
     - Features: Real-time inference (`/predict`), Health checks (`/health`), Batch prediction (`/predict/batch`).
-    - Robustness: Automatically falls back to a local model if MLflow is unavailable.
+    - **Model Loading**: By default, the API loads the best model from the **MLflow Registry** (Stage: `Production`).
+    - **Configuration**: The `MODEL_PATH` environment variable controls which model to load.
+        - Production: `models:/credit_risk_model/Production` (Explicit registry loading)
+        - Local Fallback: `models/fraud_model.pkl` (Used if MLflow is unavailable)
 - **Dashboard (Streamlit)**: Interactive UI at port 8501.
     - Features: Form input for transaction details, visual risk gauges, and probability displays.
 - **Containerization**:
