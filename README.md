@@ -373,8 +373,9 @@ python src/train_mlflow.py
 
 **View MLflow Dashboard:**
 ```bash
-mlflow ui
+python -m mlflow ui --port 5000
 ```
+👉 Go to: [http://localhost:5000](http://localhost:5000)
 
 **Run Unit Tests:**
 ```bash
